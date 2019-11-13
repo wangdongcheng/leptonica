@@ -138,6 +138,10 @@
  * </pre>
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config_auto.h>
+#endif  /* HAVE_CONFIG_H */
+
 #include <string.h>
 #include "allheaders.h"
 
@@ -1648,6 +1652,7 @@ char     ch;
                 case 'X':
                     norig++;
                     selSetOrigin(sel, y, x);
+                    /* fall through */
                 case 'x':
                     selSetElement(sel, y, x, SEL_HIT);
                     break;
@@ -1655,6 +1660,7 @@ char     ch;
                 case 'O':
                     norig++;
                     selSetOrigin(sel, y, x);
+                    /* fall through */
                 case 'o':
                     selSetElement(sel, y, x, SEL_MISS);
                     break;
@@ -1662,6 +1668,7 @@ char     ch;
                 case 'C':
                     norig++;
                     selSetOrigin(sel, y, x);
+                    /* fall through */
                 case ' ':
                     selSetElement(sel, y, x, SEL_DONT_CARE);
                     break;
@@ -1917,18 +1924,21 @@ SEL     *sel;
             {
                 case 'X':
                     selSetOrigin(sel, y, x);  /* set origin and hit */
+                    /* fall through */
                 case 'x':
                     selSetElement(sel, y, x, SEL_HIT);
                     break;
 
                 case 'O':
                     selSetOrigin(sel, y, x);  /* set origin and miss */
+                    /* fall through */
                 case 'o':
                     selSetElement(sel, y, x, SEL_MISS);
                     break;
 
                 case 'C':
                     selSetOrigin(sel, y, x);  /* set origin and don't-care */
+                    /* fall through */
                 case ' ':
                     selSetElement(sel, y, x, SEL_DONT_CARE);
                     break;

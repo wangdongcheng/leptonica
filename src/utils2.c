@@ -176,7 +176,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config_auto.h"
+#include <config_auto.h>
 #endif  /* HAVE_CONFIG_H */
 
 #ifdef _MSC_VER
@@ -1940,7 +1940,7 @@ FILE  *fp;
  * </pre>
  */
 FILE *
-fopenWriteWinTempfile()
+fopenWriteWinTempfile(void)
 {
 #ifdef _WIN32
 l_int32  handle;
@@ -3277,7 +3277,7 @@ size_t  len;
  * </pre>
  */
 char *
-l_makeTempFilename()
+l_makeTempFilename(void)
 {
 char  dirname[240];
 

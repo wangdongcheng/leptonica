@@ -711,6 +711,10 @@ char  namebuf[256];
         return ERROR_INT("invalid format", procName, 1);
     }
 
+        /* Use bmp format for testing if library for requested
+         * format for jpeg, png or tiff is not available */
+    changeFormatForMissingLib(&format);
+
         /* Generate the local file name */
     snprintf(namebuf, sizeof(namebuf), "/tmp/lept/regout/%s.%02d.%s",
              rp->testname, rp->index + 1, ImageFileFormatExtensions[format]);

@@ -98,7 +98,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config_auto.h"
+#include <config_auto.h>
 #endif  /* HAVE_CONFIG_H */
 
 #ifdef _WIN32
@@ -870,7 +870,7 @@ l_uint32  shift;
  *      (1) The caller has responsibility to free the memory.
  */
 char *
-getLeptonicaVersion()
+getLeptonicaVersion(void)
 {
 size_t  bufsize = 100;
 
@@ -1210,7 +1210,7 @@ L_WALLTIMER  *timer;
  * </pre>
  */
 char *
-l_getFormattedDate()
+l_getFormattedDate(void)
 {
 char        buf[128] = "", sep = 'Z';
 l_int32     gmt_offset, relh, relm;

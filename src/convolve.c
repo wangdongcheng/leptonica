@@ -84,6 +84,10 @@
  * </pre>
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config_auto.h>
+#endif  /* HAVE_CONFIG_H */
+
 #include <math.h>
 #include "allheaders.h"
 
@@ -2548,7 +2552,7 @@ PIX       *pixd;
  * </pre>
  */
 l_float32
-gaussDistribSampling()
+gaussDistribSampling(void)
 {
 static l_int32    select = 0;  /* flips between 0 and 1 on successive calls */
 static l_float32  saveval;

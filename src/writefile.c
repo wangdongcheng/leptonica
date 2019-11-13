@@ -60,6 +60,9 @@
  *        PIX        *pixMakeColorSquare()
  *        void        l_chooseDisplayProg()
  *
+ *     Change format for missing library
+ *        void        changeFormatForMissingLib()
+ *
  *     Deprecated pix output for debugging (still used in tesseract 3.05)
  *        l_int32     pixDisplayWrite()
  *
@@ -84,6 +87,10 @@
  *              level 1 (g4 and dct encoding: requires tiff, jpg)
  *              level 2 (g4, dct and flate encoding: requires tiff, jpg, zlib)
  */
+
+#ifdef HAVE_CONFIG_H
+#include <config_auto.h>
+#endif  /* HAVE_CONFIG_H */
 
 #include <string.h>
 #include "allheaders.h"
@@ -405,6 +412,10 @@ pixWriteStream(FILE    *fp,
     if (format == IFF_DEFAULT)
         format = pixChooseOutputFormat(pix);
 
+        /* Use bmp format for testing if library for requested
+         * format for jpeg, png or tiff is not available */
+    changeFormatForMissingLib(&format);
+
     switch(format)
     {
     case IFF_BMP:
@@ -413,11 +424,9 @@ pixWriteStream(FILE    *fp,
 
     case IFF_JFIF_JPEG:   /* default quality; baseline sequential */
         return pixWriteStreamJpeg(fp, pix, var_JPEG_QUALITY, 0);
-        break;
 
     case IFF_PNG:   /* no gamma value stored */
         return pixWriteStreamPng(fp, pix, 0.0);
-        break;
 
     case IFF_TIFF:           /* uncompressed */
     case IFF_TIFF_PACKBITS:  /* compressed, binary only */
@@ -428,39 +437,30 @@ pixWriteStream(FILE    *fp,
     case IFF_TIFF_ZIP:       /* compressed, all depths */
     case IFF_TIFF_JPEG:      /* compressed, 8 bpp gray and 32 bpp rgb */
         return pixWriteStreamTiff(fp, pix, format);
-        break;
 
     case IFF_PNM:
         return pixWriteStreamPnm(fp, pix);
-        break;
 
     case IFF_PS:
         return pixWriteStreamPS(fp, pix, NULL, 0, DefaultScaling);
-        break;
 
     case IFF_GIF:
         return pixWriteStreamGif(fp, pix);
-        break;
 
     case IFF_JP2:
         return pixWriteStreamJp2k(fp, pix, 34, 4, 0, 0);
-        break;
 
     case IFF_WEBP:
         return pixWriteStreamWebP(fp, pix, 80, 0);
-        break;
 
     case IFF_LPDF:
         return pixWriteStreamPdf(fp, pix, 0, NULL);
-        break;
 
     case IFF_SPIX:
         return pixWriteStreamSpix(fp, pix);
-        break;
 
     default:
         return ERROR_INT("unknown format", procName, 1);
-        break;
     }
 
     return 0;
@@ -720,6 +720,10 @@ l_int32  ret;
     if (format == IFF_DEFAULT)
         format = pixChooseOutputFormat(pix);
 
+        /* Use bmp format for testing if library for requested
+         * format for jpeg, png or tiff is not available */
+    changeFormatForMissingLib(&format);
+
     switch(format)
     {
     case IFF_BMP:
@@ -774,7 +778,6 @@ l_int32  ret;
 
     default:
         return ERROR_INT("unknown format", procName, 1);
-        break;
     }
 
     return ret;
@@ -1369,6 +1372,48 @@ l_chooseDisplayProg(l_int32  selection)
         L_ERROR("invalid display program\n", "l_chooseDisplayProg");
     }
     return;
+}
+
+
+/*---------------------------------------------------------------------*
+ *                   Change format for missing lib                     *
+ *---------------------------------------------------------------------*/
+/*!
+ * \brief   changeFormatForMissingLib()
+ *
+ * \param[in,out]    pformat    addr of requested output image format
+ * \return  void
+ *
+ * <pre>
+ * Notes:
+ *      (1) This is useful for testing functionality when the library for
+ *          the requested output format (jpeg, png or tiff) is not linked.
+ *          In that case, the output format is changed to bmp.
+ * </pre>
+ */
+void
+changeFormatForMissingLib(l_int32  *pformat)
+{
+    PROCNAME("changeFormatForMissingLib");
+
+#if !defined(HAVE_LIBJPEG)
+    if (*pformat == IFF_JFIF_JPEG) {
+        L_WARNING("jpeg library missing; output bmp format\n", procName);
+        *pformat = IFF_BMP;
+    }
+#endif  /* !defined(HAVE_LIBJPEG) */
+#if !defined(HAVE_LIBPNG)
+    if (*pformat == IFF_PNG) {
+        L_WARNING("png library missing; output bmp format\n", procName);
+        *pformat = IFF_BMP;
+    }
+#endif  /* !defined(HAVE_LIBPNG) */
+#if !defined(HAVE_LIBTIFF)
+    if (L_FORMAT_IS_TIFF(*pformat)) {
+        L_WARNING("tiff library missing; output bmp format\n", procName);
+        *pformat = IFF_BMP;
+    }
+#endif  /* !defined(HAVE_LIBTIFF) */
 }
 
 

@@ -31,33 +31,33 @@ if (NOT STATIC)
     target_compile_definitions  (leptonica PRIVATE -DLIBLEPT_EXPORTS)
 endif()
 
-if (GIF_LIBRARY)
+if (GIF_LIBRARIES)
     target_include_directories  (leptonica PUBLIC ${GIF_INCLUDE_DIR})
-    target_link_libraries       (leptonica ${GIF_LIBRARY})
+    target_link_libraries       (leptonica ${GIF_LIBRARIES})
 endif()
-if (JPEG_LIBRARY)
+if (JPEG_LIBRARIES)
     target_include_directories  (leptonica PUBLIC ${JPEG_INCLUDE_DIR})
-    target_link_libraries       (leptonica ${JPEG_LIBRARY})
+    target_link_libraries       (leptonica ${JPEG_LIBRARIES})
 endif()
 if (JP2K_FOUND)
     target_include_directories  (leptonica PUBLIC ${JP2K_INCLUDE_DIRS})
     target_link_libraries       (leptonica ${JP2K_LIBRARIES})
 endif()
-if (PNG_LIBRARY)
+if (PNG_LIBRARIES)
     target_include_directories  (leptonica PUBLIC ${PNG_INCLUDE_DIRS})
-    target_link_libraries       (leptonica ${PNG_LIBRARY})
+    target_link_libraries       (leptonica ${PNG_LIBRARIES})
 endif()
-if (TIFF_LIBRARY)
+if (TIFF_LIBRARIES)
     target_include_directories  (leptonica PUBLIC ${TIFF_INCLUDE_DIR})
-    target_link_libraries       (leptonica ${TIFF_LIBRARY})
+    target_link_libraries       (leptonica ${TIFF_LIBRARIES})
 endif()
 if (WEBP_FOUND)
     target_include_directories  (leptonica PUBLIC ${WEBP_INCLUDE_DIRS})
     target_link_libraries       (leptonica ${WEBP_LIBRARIES})
 endif()
-if (ZLIB_LIBRARY)
-    target_include_directories  (leptonica PUBLIC ${ZLIB_INCLUDE_DIR})
-    target_link_libraries       (leptonica ${ZLIB_LIBRARY})
+if (ZLIB_LIBRARIES)
+    target_include_directories  (leptonica PUBLIC ${ZLIB_INCLUDE_DIRS})
+    target_link_libraries       (leptonica ${ZLIB_LIBRARIES})
 endif()
 
 if (UNIX)
@@ -74,16 +74,16 @@ if (UNIX)
     endif(SYM_LINK)
 endif()
 
-if (NOT CPPAN_BUILD)
+if (NOT SW_BUILD)
     export(TARGETS leptonica FILE ${CMAKE_BINARY_DIR}/LeptonicaTargets.cmake)
 else()
     target_link_libraries       (leptonica
-        pvt.cppan.demo.gif
-        pvt.cppan.demo.jpeg
-        pvt.cppan.demo.png
-        pvt.cppan.demo.tiff
-        pvt.cppan.demo.webmproject.webp
-        pvt.cppan.demo.openjpeg.openjp2
+        org.sw.demo.gif
+        org.sw.demo.jpeg
+        org.sw.demo.glennrp.png
+        org.sw.demo.tiff
+        org.sw.demo.webmproject.webp
+        org.sw.demo.uclouvain.openjpeg.openjp2
     )
     file(WRITE ${CMAKE_BINARY_DIR}/LeptonicaTargets.cmake "include(${CMAKE_BINARY_DIR}/cppan.cmake)\n")
     export(TARGETS leptonica APPEND FILE ${CMAKE_BINARY_DIR}/LeptonicaTargets.cmake)

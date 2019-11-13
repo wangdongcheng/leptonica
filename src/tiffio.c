@@ -97,7 +97,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config_auto.h"
+#include <config_auto.h>
 #endif  /* HAVE_CONFIG_H */
 
 #include <string.h>
@@ -517,7 +517,7 @@ PIXCMAP   *cmap;
         return NULL;
     }
     if (spp == 2 && bps != 8) {
-        L_WARNING("only handle 8 bps for 2 spp\n", procName);
+        L_WARNING("for 2 spp, only handle 8 bps\n", procName);
         return NULL;
     }
     if (spp == 1)
@@ -599,7 +599,7 @@ PIXCMAP   *cmap;
             return (PIX *)ERROR_PTR("calloc fail for tiffdata", procName, NULL);
         }
             /* TIFFReadRGBAImageOriented() converts to 8 bps */
-        if (!TIFFReadRGBAImageOriented(tif, w, h, (uint32 *)tiffdata,
+        if (!TIFFReadRGBAImageOriented(tif, w, h, tiffdata,
                                        ORIENTATION_TOPLEFT, 0)) {
             LEPT_FREE(tiffdata);
             pixDestroy(&pix);
@@ -1204,7 +1204,7 @@ l_uint32   uval, uval2;
         numaGetIValue(natags, i, &tagval);
         sval = sarrayGetString(savals, i, L_NOCOPY);
         type = sarrayGetString(satypes, i, L_NOCOPY);
-        if (!strcmp(type, "char*")) {
+        if (!strcmp(type, "char*") || !strcmp(type, "const char*")) {
             TIFFSetField(tif, tagval, sval);
         } else if (!strcmp(type, "l_uint16")) {
             if (sscanf(sval, "%u", &uval) == 1) {
@@ -1242,6 +1242,7 @@ l_uint32   uval, uval2;
                 return ERROR_INT("custom tag(s) not written", procName, 1);
             }
         } else {
+            fprintf(stderr, "unknown type %s\n",type);
             return ERROR_INT("unknown type; tag(s) not written", procName, 1);
         }
     }
@@ -1805,11 +1806,7 @@ TIFF    *tif;
         return ERROR_INT("no results requested", procName, 1);
 
     findFileFormatStream(fp, &format);
-    if (format != IFF_TIFF &&
-        format != IFF_TIFF_G3 && format != IFF_TIFF_G4 &&
-        format != IFF_TIFF_RLE && format != IFF_TIFF_PACKBITS &&
-        format != IFF_TIFF_LZW && format != IFF_TIFF_ZIP &&
-        format != IFF_TIFF_JPEG)
+    if (!L_FORMAT_IS_TIFF(format))
         return ERROR_INT("file not tiff format", procName, 1);
 
     if ((tif = fopenTiff(fp, "r")) == NULL)
