@@ -42,8 +42,6 @@
  *    large number of images will be displayed on the screen.
  */
 
-    /* Needed for: HAVE_LIBJP2K, HAVE_LIBGIF,
-     *             HAVE_LIBWEBP and HAVE_LIBWEBP_ANIM  */
 #ifdef HAVE_CONFIG_H
 #include <config_auto.h>
 #endif /* HAVE_CONFIG_H */
@@ -76,6 +74,7 @@ static const char *tests[] = {
                               "bytea_reg",
                               "ccthin1_reg",
                               "ccthin2_reg",
+                              "checkerboard_reg",
                               "cmapquant_reg",
                               "colorcontent_reg",
                               "coloring_reg",
@@ -147,6 +146,7 @@ static const char *tests[] = {
                               "pdfio1_reg",
                               "pdfio2_reg",
                               "pdfseg_reg",
+                              "pixa1_reg",
                               "pixa2_reg",
                               "pixadisp_reg",
                               "pixcomp_reg",

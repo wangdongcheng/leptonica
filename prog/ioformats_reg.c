@@ -57,12 +57,11 @@
  *        libwebp, libopenjp2, libgif
  */
 
-#include "allheaders.h"
-
-    /* Needed for checking libraries */
 #ifdef HAVE_CONFIG_H
 #include <config_auto.h>
 #endif /* HAVE_CONFIG_H */
+
+#include "allheaders.h"
 
 #define   BMP_FILE             "test1.bmp"
 #define   FILE_1BPP            "feyn.tif"
@@ -279,7 +278,7 @@ L_REGPARAMS  *rp;
     pixDestroy(&pix1);
     pixDestroy(&pix2);
     pixDestroy(&pix3);
-    
+
         /* Test writing and reading tiff with alpha */
     pix1 = pixRead(FILE_GRAY_ALPHA_TIF);  /* converts to RGBA */
     pixWrite("/tmp/lept/regout/graya.tif", pix1, IFF_TIFF);
@@ -307,7 +306,7 @@ L_REGPARAMS  *rp;
     }
     pixDestroy(&pix1);
     pixDestroy(&pix2);
-    
+
         /* Test reading 16 bit sampled rgb tiff */
     pix1 = pixRead(FILE_RGB16_TIF);  /* converts 16 to 8 bits RGB */
     pixWrite("/tmp/lept/regout/rgb16.tif", pix1, IFF_TIFF_ZIP);
